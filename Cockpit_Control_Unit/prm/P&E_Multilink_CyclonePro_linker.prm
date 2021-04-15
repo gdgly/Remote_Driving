@@ -1,0 +1,435 @@
+/* This is a linker parameter file for the MC9S12XEP100 */
+
+
+/*
+   This parameter file is setup in a generic way to allow exploring most common features of both cores:
+   - S12X core
+   - XGATE code and constants in FLASH and/or RAM
+   - XGATE data and stack in RAM
+   It might be required to adapt some of the definitions to best match your application.
+*/
+
+NAMES
+    /* CodeWarrior will pass all the needed files to the linker by command line. But here you may add your additional files */
+END
+
+SEGMENTS /* here all RAM/ROM areas of the device are listed. Used in PLACEMENT below. All addresses are 'logical' */
+
+/* Register space  */
+/*    IO_SEG        = PAGED         0x0000 TO   0x07FF; intentionally not defined */
+
+/* non-paged EEPROM */
+      EEPROM_FF    = READ_ONLY     0x0C00 TO   0x0FFF;  //1K
+
+/* non-paged RAM */
+      RAM           = READ_WRITE    0x2000 TO   0x3FB7 ALIGN 2[1:1]; /* 8k,word align for XGATE accesses */
+      RAM_DEFAULT_2 = READ_WRITE    0x3FB8 TO   0x3FFF; //72个字节,用于Bootloader
+
+/* non-banked FLASH */
+      ROM_4000      = READ_ONLY     0x4000 TO   0x40FF;
+      ROM_4100      = READ_ONLY     0x4100 TO   0x7FFF;
+      ROM_C000      = READ_ONLY     0xC000 TO   0xFBFF;      
+      ROM_VECTORS   = READ_ONLY     0xFC00 TO   0xFEFF;      
+            
+/*    VECTORS       = READ_ONLY     0xFF00 TO   0xFFFF; intentionally not defined: used for VECTOR commands below */
+    //OSVECTORS     = READ_ONLY     0xFF10 TO   0xFFFF;  /* OSEK interrupt vectors (use your vector.o) */
+
+/* paged EEPROM                     0x0800 TO   0x0BFF; addressed through EPAGE */
+      EEPROM_FC     = READ_ONLY   0xFC0800 TO 0xFC0BFF; //1K
+      EEPROM_FD     = READ_ONLY   0xFD0800 TO 0xFD09FF; //0.5K
+      EEPROM_OTHERINFO    = READ_ONLY   0xFD0A00 TO 0xFD0BFF; //0.5K
+      EEPROM_RUNINFO_COPY_VERIFY= READ_ONLY   0xFE0800 TO 0xFE0807; //8字节      
+      EEPROM_RUNINFO_COPY     = READ_ONLY   0xFE0808 TO 0xFE09FF; //0.5K-8      
+      EEPROM_RUNFINFO    = READ_ONLY   0xFE0A00 TO 0xFE0BFF; //0.5K
+/*    EEPROM_FF     = READ_ONLY   0xFF0800 TO 0xFF0BFF; intentionally not defined: equivalent to EEPROM */
+
+/* paged RAM:                       0x1000 TO   0x1FFF; addressed through RPAGE */       
+        
+      //内部RAM            
+      RAM_XGATE_STK = READ_WRITE  0xF81000 TO 0xF810FF; /* The stack is set by the XGATE compiler option -Cstv=8100 */
+      RAM_F0        = READ_WRITE  0xF01000 TO 0xF01FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x0000..0x0FFF */
+      RAM_F1        = READ_WRITE  0xF11000 TO 0xF11FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x1000..0x1FFF */
+      RAM_F2        = READ_WRITE  0xF21000 TO 0xF21FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x2000..0x2FFF */
+      RAM_F3        = READ_WRITE  0xF31000 TO 0xF31FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x3000..0x3FFF */
+      RAM_F4        = READ_WRITE  0xF41000 TO 0xF41FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x4000..0x4FFF */
+      RAM_F5        = READ_WRITE  0xF51000 TO 0xF51FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x5000..0x5FFF */
+      RAM_F6        = READ_WRITE  0xF61000 TO 0xF61FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x6000..0x6FFF */
+      RAM_F7        = READ_WRITE  0xF71000 TO 0xF71FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x7000..0x7FFF */
+      RAM_F8        = READ_WRITE  0xF81100 TO 0xF81FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x8100..0x8FFF */
+      RAM_F9        = READ_WRITE  0xF91000 TO 0xF91FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x9000..0x9FFF */
+      RAM_FA        = READ_WRITE  0xFA1000 TO 0xFA1FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0xA000..0xAFFF */
+      RAM_FB        = READ_WRITE  0xFB1000 TO 0xFB1FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0xB000..0xBFFF */
+      RAM_FC        = READ_WRITE  0xFC1000 TO 0xFC1FFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0xC000..0xCFFF */      
+      RAM_FD        = READ_WRITE  0xFD1000 TO 0xFD1BFF; // 3K
+      RAM_FD_FLASHPROGRAM = READ_WRITE  0xFD1C00 TO 0xFD1DF7; //0.5K-8, 后面8个字节用作系统复位源识别
+      RAM_FD_TEST   = READ_WRITE  0xFD1E00 TO 0xFD1FFF; //0.5K   /*4k is also mapped to XGATE:  0xD000..0xDFFF */
+      
+/*    RAM_FE        = READ_WRITE  0xFE1000 TO 0xFE1FFF; intentionally not defined: equivalent to RAM: 0x2000..0x2FFF */
+/*    RAM_FF        = READ_WRITE  0xFF1000 TO 0xFF1FFF; intentionally not defined: equivalent to RAM: 0x3000..0x3FFF */
+
+/* paged FLASH:                     0x8000 TO   0xBFFF; addressed through PPAGE */
+            
+      //以下4K Flash用于保存EEPROM初值
+      FLASH_DSM                = READ_ONLY   0xC08000 TO 0xC085FF; //1.5K            
+      FLASH_OTHERINFO          = READ_ONLY   0xC08600 TO 0xC087FF; //0.5K
+      FLASH_RUNINFO_COPY_VERIFY= READ_ONLY   0xC08800 TO 0xC08807; //8字节      
+      FLASH_RUNINFO_COPY       = READ_ONLY   0xC08808 TO 0xC089FF; //0.5K-8      
+      FLASH_RUNFINFO           = READ_ONLY   0xC08A00 TO 0xC08BFF; //0.5K
+      FLASH_RUNPAR             = READ_ONLY   0xC08C00 TO 0xC08DFF; //0.5K
+      FLASH_RUNPAR_FLASH       = READ_ONLY   0xC08E00 TO 0xC08FFF; //0.5K      
+      PAGE_C0       = READ_ONLY   0xC09000 TO 0xC0BBFF;
+      FLASH_ECUSN   = READ_ONLY   0xC0BC00 TO 0xC0BFFF; //1K 
+      
+      
+      PAGE_C1       = READ_ONLY   0xC18000 TO 0xC1BFFF; 
+      PAGE_C2       = READ_ONLY   0xC28000 TO 0xC2BFFF; 
+      PAGE_C3       = READ_ONLY   0xC38000 TO 0xC3BFFF; 
+      PAGE_C4       = READ_ONLY   0xC48000 TO 0xC4BFFF; 
+      PAGE_C5       = READ_ONLY   0xC58000 TO 0xC5BFFF; 
+      PAGE_C6       = READ_ONLY   0xC68000 TO 0xC6BFFF; 
+      PAGE_C7       = READ_ONLY   0xC78000 TO 0xC7BFFF; 
+
+      PAGE_C8       = READ_ONLY   0xC88000 TO 0xC8BFFF; 
+      PAGE_C9       = READ_ONLY   0xC98000 TO 0xC9BFFF; 
+      PAGE_CA       = READ_ONLY   0xCA8000 TO 0xCABFFF; 
+      PAGE_CB       = READ_ONLY   0xCB8000 TO 0xCBBFFF; 
+      PAGE_CC       = READ_ONLY   0xCC8000 TO 0xCCBFFF; 
+      PAGE_CD       = READ_ONLY   0xCD8000 TO 0xCDBFFF; 
+      PAGE_CE       = READ_ONLY   0xCE8000 TO 0xCEBFFF; 
+      PAGE_CF       = READ_ONLY   0xCF8000 TO 0xCFBFFF; 
+
+      PAGE_D0       = READ_ONLY   0xD08000 TO 0xD0BFFF; 
+      PAGE_D1       = READ_ONLY   0xD18000 TO 0xD1BFFF; 
+      PAGE_D2       = READ_ONLY   0xD28000 TO 0xD2BFFF; 
+      PAGE_D3       = READ_ONLY   0xD38000 TO 0xD3BFFF; 
+      PAGE_D4       = READ_ONLY   0xD48000 TO 0xD4BFFF; 
+      PAGE_D5       = READ_ONLY   0xD58000 TO 0xD5BFFF; 
+      PAGE_D6       = READ_ONLY   0xD68000 TO 0xD6BFFF; 
+      PAGE_D7       = READ_ONLY   0xD78000 TO 0xD7BFFF; 
+
+      PAGE_D8       = READ_ONLY   0xD88000 TO 0xD8BFFF; 
+      PAGE_D9       = READ_ONLY   0xD98000 TO 0xD9BFFF; 
+      PAGE_DA       = READ_ONLY   0xDA8000 TO 0xDABFFF; 
+      PAGE_DB       = READ_ONLY   0xDB8000 TO 0xDBBFFF; 
+      PAGE_DC       = READ_ONLY   0xDC8000 TO 0xDCBFFF; 
+      PAGE_DD       = READ_ONLY   0xDD8000 TO 0xDDBFFF; 
+      PAGE_DE       = READ_ONLY   0xDE8000 TO 0xDEBFFF; 
+      PAGE_DF       = READ_ONLY   0xDF8000 TO 0xDFBFFF; 
+      
+      PAGE_E0_0     = READ_ONLY   0xE08000 TO 0xE087FF;         /* cannot be mapped to XGATE; XGATE sees registers here */
+      PAGE_E0       = READ_ONLY   0xE08800 TO 0xE0BFFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x0800..0x3FFF        */
+      PAGE_E1       = READ_ONLY   0xE18000 TO 0xE1BFFF ALIGN 2[1:1]; /* is also mapped to XGATE:  0x4000..0x7FFF        */
+      PAGE_E2       = READ_ONLY   0xE28000 TO 0xE2BFFF;         /* cannot be mapped to XGATE; this module should NOT be */
+      PAGE_E3       = READ_ONLY   0xE38000 TO 0xE3BFFF;         /* used for HC12 code when also used for XGATE code     */
+      PAGE_E4       = READ_ONLY   0xE48000 TO 0xE4BFFF;         /* since the HC12 will have priority over the XGATE     */
+      PAGE_E5       = READ_ONLY   0xE58000 TO 0xE5BFFF;         /* accessing the FLASH modules resulting very poor      */
+      PAGE_E6       = READ_ONLY   0xE68000 TO 0xE6BFFF;         /* performance of the XGATE:                            */
+      PAGE_E7       = READ_ONLY   0xE78000 TO 0xE7BFFF;         /* Check allocation of this ranges in PLACEMENT below!  */
+
+      PAGE_E8       = READ_ONLY   0xE88000 TO 0xE8BFFF;
+      PAGE_E9       = READ_ONLY   0xE98000 TO 0xE9BFFF;
+      PAGE_EA       = READ_ONLY   0xEA8000 TO 0xEABFFF;
+      PAGE_EB       = READ_ONLY   0xEB8000 TO 0xEBBFFF;
+      PAGE_EC       = READ_ONLY   0xEC8000 TO 0xECBFFF;
+      PAGE_ED       = READ_ONLY   0xED8000 TO 0xEDBFFF;
+      PAGE_EE       = READ_ONLY   0xEE8000 TO 0xEEBFFF;
+      PAGE_EF       = READ_ONLY   0xEF8000 TO 0xEFBFFF;
+
+      PAGE_F0       = READ_ONLY   0xF08000 TO 0xF0BFFF;
+      PAGE_F1       = READ_ONLY   0xF18000 TO 0xF1BFFF;
+      PAGE_F2       = READ_ONLY   0xF28000 TO 0xF2BFFF;
+      PAGE_F3       = READ_ONLY   0xF38000 TO 0xF3A7FF;
+      
+      ROM_EOLENG    = READ_ONLY   0xF3A800 TO 0xF3AFFF; //2K
+      ROM_EOLVEH    = READ_ONLY   0xF3B000 TO 0xF3B7FF; //2K
+      ROM_EOLOTHER  = READ_ONLY   0xF3B800 TO 0xF3BFFF; //2K    
+      
+      
+      PAGE_F4       = READ_ONLY   0xF48000 TO 0xF4BFFF;
+      PAGE_F5       = READ_ONLY   0xF58000 TO 0xF5BFFF;      
+      PAGE_F6       = READ_ONLY   0xF68000 TO 0xF6BFFF;                   
+      PAGE_F7       = READ_ONLY   0xF78000 TO 0xF7BFFF;
+      PAGE_F8       = READ_ONLY   0xF88000 TO 0xF8BFFF;
+      PAGE_F9       = READ_ONLY   0xF98000 TO 0xF9BFFF;
+      PAGE_FA       = READ_ONLY   0xFA8000 TO 0xFABFFF;
+      PAGE_FB       = READ_ONLY   0xFB8000 TO 0xFBBFFF;
+      
+      PAGE_FC       = READ_ONLY   0xFC8000 TO 0xFC9FFF;    
+      PAGE_FC_VERIFY= READ_ONLY   0xFCA000 TO 0xFCBFFF;   
+      
+       
+/*    PAGE_FD       = READ_ONLY   0xFD8000 TO 0xFDBFFF; intentionally not defined: equivalent to ROM_4000 */
+      PAGE_FE_VERIFY= READ_ONLY   0xFE8000 TO 0xFE9FFF; //8K     
+      PAGE_FE_1     = READ_ONLY   0xFEA000 TO 0xFEA3FF; //1K     
+      PAGE_FE_2     = READ_ONLY   0xFEA400 TO 0xFEA7FF; //1K     
+      PAGE_FE_3     = READ_ONLY   0xFEA800 TO 0xFEABFF; //1K
+      PAGE_FE_4     = READ_ONLY   0xFEAC00 TO 0xFEAFFF; //1K
+      PAGE_FE_5     = READ_ONLY   0xFEB000 TO 0xFEB3FF; //1K
+      PAGE_FE_6     = READ_ONLY   0xFEB400 TO 0xFEB7FF; //1K
+      PAGE_FE_7     = READ_ONLY   0xFEB800 TO 0xFEBBFF; //1K     
+      PAGE_FE_8     = READ_ONLY   0xFEBC00 TO 0xFEBFFF; //1K     
+      
+/*    PAGE_FF       = READ_ONLY   0xFF8000 TO 0xFFBFFF; intentionally not defined: equivalent to ROM_C000 */
+
+END
+
+PLACEMENT /* here all predefined and user segments are placed into the SEGMENTS defined above. */
+      
+      //系统用Flash
+      
+      _PRESTART,              /* Used in HIWARE format: jump to _Startup at the code start */
+      STARTUP,                /* startup data structures */
+      ROM_VAR,                /* constant variables */
+      STRINGS,                /* string literals */
+      VIRTUAL_TABLE_SEGMENT,  /* C++ virtual table segment */
+    //.ostext,                /* eventually OSEK code  */
+      NON_BANKED,             /* runtime routines which must not be banked */ 
+      COPY                    /* copy down information: how to initialize variables */     
+                              /* in case you want to use ROM_4000 here as well, make sure
+                                 that all files (incl. library files) are compiled with the
+                                 option: -OnB=b */
+                        INTO  ROM_C000;
+                        
+      
+      
+      
+      //中断向量用Flash                            
+      INT_FUNCTION                        
+                        INTO  ROM_4100;
+      
+      NEW_VECTORS       INTO  ROM_4000; //新定义的中断向量
+
+
+
+
+      //标定用Flash       
+      PARAMETERS_ROM1    INTO  
+                              PAGE_F4;                              
+      PARAMETERS_ROM2    INTO  
+                              PAGE_F5;                                    
+      PARAMETERS_ROM3    INTO  
+                              PAGE_F6;
+      PARAMETERS_ROM4   INTO                              
+                              PAGE_F7;
+      PARAMETERS_ROM5   INTO                              
+                              PAGE_F8;                                                            
+      PARAMETERS_ROM6   INTO                              
+                              PAGE_F9;
+      PARAMETERS_ROM7   INTO                          
+                              PAGE_FA;
+      PARAMETERS_ROM8   INTO                                                              
+                              PAGE_FB; //可标定参数                                                                                         
+      
+      
+      
+      
+      //应用层程序所用Flash                              
+      DEFAULT_ROM        INTO  
+                              PAGE_F3, PAGE_F2, PAGE_F1, PAGE_F0,PAGE_EF, 
+                              PAGE_EE,PAGE_ED, PAGE_EC, PAGE_EB, PAGE_EA, PAGE_E9, PAGE_E8,PAGE_E7,  
+                              /* use the following ranges only when same module is NOT used for XGATE code */                              
+                               PAGE_E6,PAGE_E5, PAGE_E4, PAGE_E3, PAGE_E2,
+                              /* PAGE_E1 intentionally not listed: assigned to XGATE */
+                              /* PAGE_E0 intentionally not listed: assigned to XGATE */
+                              PAGE_E0_0,
+                                
+                              PAGE_DF, PAGE_DE, PAGE_DD, PAGE_DC, PAGE_DB, PAGE_DA, PAGE_D9, PAGE_D8,                              
+                              PAGE_D7, PAGE_D6, PAGE_D5, PAGE_D4, PAGE_D3, PAGE_D2, PAGE_D1, PAGE_D0, 
+                              PAGE_CF, PAGE_CE, PAGE_CD, PAGE_CC, PAGE_CB, PAGE_CA, PAGE_C9, PAGE_C8, 
+                              PAGE_C7, PAGE_C6, PAGE_C5, PAGE_C4, PAGE_C3, PAGE_C2, PAGE_C0; //128K*3
+                                 
+                              
+                              
+      //BootLoader所用Flash
+      //页FC保存校验备份
+      CODE_VERIFY_BACK
+                        INTO
+                              PAGE_FC_VERIFY;  //代码校验信息备份，16K                       
+      CODE_VERIFY
+                        INTO
+                              PAGE_FE_VERIFY;  //代码校验区，8K
+      DATA_VERIFY1      INTO
+                              PAGE_FE_1; //第一段数据校验用,1K
+      DATA_VERIFY2      INTO
+                              PAGE_FE_2; //第二段数据校验用,1K
+      DATA_VERIFY3      INTO
+                              PAGE_FE_3; //第三段数据校验用,1K
+      DATA_VERIFY4      INTO
+                              PAGE_FE_4; //第四段数据校验用,1K 
+      DATA_VERIFY5      INTO
+                              PAGE_FE_5; //第五段数据校验用,1K 
+      DATA_VERIFY6      INTO
+                              PAGE_FE_6; //第六段数据校验用,1K 
+      DATA_VERIFY7      INTO
+                              PAGE_FE_7; //第六段数据校验用,1K 
+      DATA_VERIFY8      INTO
+                              PAGE_FE_8; //第六段数据校验用,1K
+                              
+                              
+      ECUSN_FLASH       INTO
+                              FLASH_ECUSN; //ECU生产序列号                                                             
+                                                                                                                             
+            
+      STARTCODE_FLASH   INTO                                           
+                              ROM_VECTORS; //起动代码，不能刷写,1K
+      
+      
+      BOOTLOADER_CONST,  //必须放在最Page C1的开始，否则需要修改Bootloader
+      BOOTLOADER_PIC_FLASH,      
+      BOOTLOADER_FLASH  INTO
+                              PAGE_C1;    //Bootloader部分其它代码
+      
+      
+      //EOL数据所用Flash
+      
+      EOLENG_FLASH      INTO
+                              ROM_EOLENG;  //EOL 发动机厂数据 
+      
+      EOLVEH_FLASH      INTO
+                              ROM_EOLVEH;  //EOL 整车厂数据                              
+      
+      EOLOTHER_FLASH    INTO
+                              ROM_EOLOTHER;  //EOL 其它数据  
+                                    
+                              
+
+
+      //XGATE所用Flash
+
+      XGATE_STRING_FLASH,     /* XGATE strings that should always go into flash */
+      XGATE_CONST_FLASH,      /* XGATE constants what should always go into flash */
+      XGATE_CODE_FLASH        /* XGATE code that should always run out of flash */
+                        INTO  PAGE_E0, PAGE_E1; /* FLASH accessible by XGATE */
+
+
+
+
+
+      //变量用内部RAM
+      
+      SSTACK,                 /* allocate stack first to avoid overwriting variables */
+      SHARED_DATA,            /* variables that are shared between CPU12 and XGATE */
+      DEFAULT_RAM             /* all variables, the default RAM location */
+                        INTO  RAM;   //8K
+                        
+      BOOTLOADER_RAM    INTO
+                              RAM_DEFAULT_2;    //该部分RAM用于Bootloader,72字节
+      
+      
+                        
+      OTHERPAGE_RAM     INTO                        
+      
+                              RAM_F4,RAM_F5,RAM_F6,RAM_F7,RAM_FA,RAM_FB,RAM_FC,RAM_FD; //28K，存放变量
+      
+      
+      
+      BOOTLOADER_PIC_RAM INTO
+                              RAM_FD_FLASHPROGRAM; //0.5K，用于Flash编程      
+      
+      //测试用RAM                              
+      TEST_RAM          
+                        INTO
+                              RAM_FD_TEST;  //用于内部RAM测试，0.5K             
+      
+
+
+
+      //XGATE使用
+      
+      XGATE_VECTORS,         /* XGATE vector table has to be copied into RAM by HCS12X */
+      XGATE_STRING,           /* XGATE string literals have to be copied into RAM by HCS12X */
+      XGATE_CONST,            /* XGATE constants have to be copied into RAM by HCS12X */
+      XGATE_CODE,             /* XGATE functions have to be copied into RAM by HCS12X */
+      XGATE_STRING_RAM,       /* XGATE strings that should always go into RAM */
+      XGATE_CONST_RAM,        /* XGATE constants what should always go into RAM */
+      XGATE_CODE_RAM,          /* XGATE code that should always run out of RAM */
+      XGATE_DATA               /* data that are accessed by XGATE only */
+                 /* Calibration RAM */
+                        INTO  RAM_F8,RAM_F9;                                 
+      
+      
+      
+      
+      //标定用内部RAM                        
+      PARAMETERS_RAM           
+                        INTO
+                              RAM_F0,RAM_F1,RAM_F2,RAM_F3; //小RAM标定用RAM,16K                                                        
+      
+                              
+      //EEPROM
+      
+      RUNPAR_EEPROM     
+                        INTO  
+                              EEPROM_FC,EEPROM_FD,EEPROM_FF;   //运行参数,在FLASH中没有基础备份,2.5K  
+      OTHERINFO_EEPROM
+                        INTO
+                              EEPROM_OTHERINFO;  //0.5K,其它信息      
+      RUNINFO_COPY_EEPROM    
+                        INTO
+                              EEPROM_RUNINFO_COPY;  //运行信息,0.5K-8,初始化时需要把这些信息拷贝到RAM Mirror中
+      RUNINFO_COPY_VERIFY_EEPROM            
+                        INTO 
+                              EEPROM_RUNINFO_COPY_VERIFY;  //8字节                      
+                                    
+      RUNINFO_EEPROM    INTO
+                              EEPROM_RUNFINFO;  //运行信息,0.5K,初始化时不需要把这些信息拷贝到RAM Mirror中
+                              
+      
+      
+                  
+                              
+                              
+                              
+                              
+      
+      //FLASH，下面的Flash只为保存初始值
+      
+      RUNPAR_FLASH    
+                        INTO  
+                              FLASH_RUNPAR;   //运行参数,在FLASH中没有基础备份,0.5K
+      RUNPAR_FLASH_FLASH 
+                        INTO  
+                              FLASH_RUNPAR_FLASH;   //运行参数,在FLASH中还有基础备份,0.5K            
+      DSM_FLASH        
+                        INTO                              
+                              FLASH_DSM;   //故障诊断用EEPROM,1.5K
+      OTHERINFO_FLASH
+                        INTO
+                              FLASH_OTHERINFO;  //其它信息,0.5k
+      
+      RUNINFO_COPY_FLASH
+                        INTO
+                              FLASH_RUNINFO_COPY;  //运行信息,0.5k,初始化时需要把这些信息拷贝到RAM Mirror中
+      RUNINFO_COPY_VERIFY_FLASH
+                        INTO 
+                              FLASH_RUNINFO_COPY_VERIFY;                        
+                                    
+      RUNINFO_FLASH    INTO
+                              FLASH_RUNFINFO;  //运行信息,0.5K,初始化时不需要把这些信息拷贝到RAM Mirror中
+                              
+                                                            
+                              
+
+    //.vectors          INTO  OSVECTORS; /* OSEK vector table */
+END
+
+
+ENTRIES /* keep the following unreferenced variables */
+      /* OSEK: always allocate the vector table and all dependent objects */
+      //_vectab OsBuildNumber _OsOrtiStackStart _OsOrtiStart
+END
+
+STACKSIZE 0x200   /* size of the stack (will be allocated in DEFAULT_RAM) */
+
+/* use these definitions in plane of the vector table ('vectors') above */
+VECTOR  0 HardwareDrv_PwrOnISR /* reset vector: this is the default entry point for a C/C++ application. */
+
+VECTOR  1 HardwareDrv_ClockMonitorISR
+VECTOR  2 HardwareDrv_COPISR
+
+
+
+
+
+//VECTOR 0 Entry  /* reset vector: this is the default entry point for an Assembly application. */
+//INIT Entry      /* for assembly applications: that this is as well the initialization entry point */

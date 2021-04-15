@@ -1,0 +1,129 @@
+
+
+
+
+
+
+
+
+                                                                  
+
+
+                                                           CDM V15.0.193
+
+
+
+
+                                                                数据列表
+                                                               ------
+                                                               物理值 描述
+
+
+
+
+
+       数据集:                        [VC-04_newbuild\VC-04_newbuild] USER A\VC-04\VehicleController-V4, 223 变量
+         描述文件:                     C:\Users\Administrator\Desktop\VCU\ACES\VCU04V1.6\Sources\VCU\MAP\VehicleController-V4.a2l
+           日期:                       2016/10/31
+           时间:                       16:15:49
+         数据文件:                     C:\Users\Administrator\Desktop\VCU\ACES\VCU04V1.6\release\VC-04_newbuild.S19
+           日期:                       2016/10/31
+           时间:                       16:15:50
+
+
+         用户:                        
+         部门:                       
+         日期:                       2016/10/31 16:50:13
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(C) All rights reserved, also for pending patent applications.
+All powers of disposition at ETAS GmbH.
+
+
++-------------+------------------------------------------------------------------------------------------------------------+-------+
+|             |                                                    数据列表                                                    |页     2|
+|CDM V15.0.193|                     [VC-04_newbuild\VC-04_newbuild] USER A\VC-04\VehicleController-V4                      |2016/10
+                                                                                                                           /31     |
++-------------+------------------------------------------------------------------------------------------------------------+-------+
+
+(C) All rights reserved, also for pending patent applications.
+All powers of disposition at ETAS GmbH.
+
+
+
+Vehicle_Type                 值
+  长标识符:                      车型定义 1、优优 2、D11\D12-700Nm 3、D07-750   4、A9
+  值:                         5.0000000000000000
+  转换名:                       NO_COMPU_METHOD
+  类型:                        值
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
++-------------+------------------------------------------------------------------------------------------------------------+-------+
+|             |                                                    数据列表                                                    |页     3|
+|CDM V15.0.193|                     [VC-04_newbuild\VC-04_newbuild] USER A\VC-04\VehicleController-V4                      |2016/10
+                                                                                                                           /31     |
++-------------+------------------------------------------------------------------------------------------------------------+-------+
+
+(C) All rights reserved, also for pending patent applications.
+All powers of disposition at ETAS GmbH.
+
+
+                                                                 目录
+                                                             ==========
+
+
+  页   变量                                    描述
+
+
+  2   Vehicle_Type                          车型定义 1、优优 2、D11\D12-700Nm 3、D07-750   4、A9
