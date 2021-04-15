@@ -1,0 +1,22 @@
+// After load the commands written below will be executed
+reset
+
+wb 0x03c 0x00	 //disable cop
+wait 20
+
+WB 0x100 0x03   // clock divider,FCLKDIV=0x03
+WB 0x106 0x30   // clear any error flags
+WB 0x102 0x00   // CCOBIX = 0
+WB 0x10A 0x0F   // D-Flash Full Partition
+WB 0x102 0x01   // CCOBIX = 1
+WB 0x10A 0x00   // DFPART=0
+WB 0x10B 0x00   // DFPART=0
+WB 0x102 0x02   // CCOBIX = 2
+WB 0x10A 0x00   // ERPART=16
+WB 0x10B 0x10   // ERPART=16
+WB 0x106 0x80   // launch command
+
+WAIT 10
+
+
+reset

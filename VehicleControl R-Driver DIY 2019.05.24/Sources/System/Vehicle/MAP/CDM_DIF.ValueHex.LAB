@@ -1,0 +1,6 @@
+[Label]
+AccPed_Rip; (容错);数值(phys)不一致.[USER A\VC-04\VehicleController-V4.VC-04_newbuild, USER A\VC-04\VehicleController-V4.VC-04_newbuild_1]
+AccPed_Rip_M03; (容错);数值(phys)不一致.[USER A\VC-04\VehicleController-V4.VC-04_newbuild, USER A\VC-04\VehicleController-V4.VC-04_newbuild_1]
+AccPedCD_rUW_CUR; (容错);数值(phys)不一致.[USER A\VC-04\VehicleController-V4.VC-04_newbuild, USER A\VC-04\VehicleController-V4.VC-04_newbuild_1]
+AccPedCD_rUW_CUR_M03; (容错);数值(phys)不一致.[USER A\VC-04\VehicleController-V4.VC-04_newbuild, USER A\VC-04\VehicleController-V4.VC-04_newbuild_1]
+Vehicle_Type; (容错);数值(phys)不一致.[USER A\VC-04\VehicleController-V4.VC-04_newbuild, USER A\VC-04\VehicleController-V4.VC-04_newbuild_1]
